@@ -1,0 +1,6 @@
+framework module Pods_SpotifyChallenge_SpotifyChallengeUITests {
+  umbrella header "Pods-SpotifyChallenge-SpotifyChallengeUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
