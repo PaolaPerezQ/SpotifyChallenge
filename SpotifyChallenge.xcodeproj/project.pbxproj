@@ -8,8 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		1433449D6B2A39B2EB90A6B1 /* Pods_SpotifyChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0DF65F0A99F9D767751DEF /* Pods_SpotifyChallenge.framework */; };
+		4F43068B2AA96BC10039183A /* ApiArtists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F43068A2AA96BC10039183A /* ApiArtists.swift */; };
+		4F43068F2AA96E190039183A /* SpotifyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F43068E2AA96E190039183A /* SpotifyViewModel.swift */; };
+		4F4306942AAA8D6B0039183A /* ApiNewRelease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4306932AAA8D6B0039183A /* ApiNewRelease.swift */; };
+		4F4306962AAA8D8F0039183A /* ApiGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4306952AAA8D8F0039183A /* ApiGenre.swift */; };
+		4F5538B42AAA9EB200E2BE43 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5538B32AAA9EB200E2BE43 /* ContentView.swift */; };
 		4F6AD1572AA909DB00781234 /* SpotifyChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6AD1562AA909DB00781234 /* SpotifyChallengeApp.swift */; };
-		4F6AD1592AA909DB00781234 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6AD1582AA909DB00781234 /* ContentView.swift */; };
+		4F6AD1592AA909DB00781234 /* SpotifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6AD1582AA909DB00781234 /* SpotifyViewController.swift */; };
 		4F6AD15B2AA909DD00781234 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F6AD15A2AA909DD00781234 /* Assets.xcassets */; };
 		4F6AD15E2AA909DD00781234 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F6AD15D2AA909DD00781234 /* Preview Assets.xcassets */; };
 		4F6AD1682AA909DD00781234 /* SpotifyChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6AD1672AA909DD00781234 /* SpotifyChallengeTests.swift */; };
@@ -40,9 +45,14 @@
 		0B33BDAB21ADCCC2AFC8217F /* Pods_SpotifyChallenge_SpotifyChallengeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotifyChallenge_SpotifyChallengeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C0DF65F0A99F9D767751DEF /* Pods_SpotifyChallenge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotifyChallenge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		319815039057999F297C3DA7 /* Pods-SpotifyChallengeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyChallengeTests.debug.xcconfig"; path = "Target Support Files/Pods-SpotifyChallengeTests/Pods-SpotifyChallengeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4F43068A2AA96BC10039183A /* ApiArtists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiArtists.swift; sourceTree = "<group>"; };
+		4F43068E2AA96E190039183A /* SpotifyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyViewModel.swift; sourceTree = "<group>"; };
+		4F4306932AAA8D6B0039183A /* ApiNewRelease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiNewRelease.swift; sourceTree = "<group>"; };
+		4F4306952AAA8D8F0039183A /* ApiGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiGenre.swift; sourceTree = "<group>"; };
+		4F5538B32AAA9EB200E2BE43 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4F6AD1532AA909DB00781234 /* SpotifyChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotifyChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F6AD1562AA909DB00781234 /* SpotifyChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyChallengeApp.swift; sourceTree = "<group>"; };
-		4F6AD1582AA909DB00781234 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4F6AD1582AA909DB00781234 /* SpotifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyViewController.swift; sourceTree = "<group>"; };
 		4F6AD15A2AA909DD00781234 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F6AD15D2AA909DD00781234 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4F6AD1632AA909DD00781234 /* SpotifyChallengeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotifyChallengeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +96,65 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F4306882AA96B8C0039183A /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				4F4306912AAA4F970039183A /* ViewController */,
+				4F4306902AAA4F8D0039183A /* ViewModel */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		4F4306892AA96B940039183A /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				4F4306922AAA8AD50039183A /* Entity */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		4F43068C2AA96BDA0039183A /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		4F43068D2AA96E090039183A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4F6AD1562AA909DB00781234 /* SpotifyChallengeApp.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4F4306902AAA4F8D0039183A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				4F43068E2AA96E190039183A /* SpotifyViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		4F4306912AAA4F970039183A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4F6AD1582AA909DB00781234 /* SpotifyViewController.swift */,
+				4F5538B32AAA9EB200E2BE43 /* ContentView.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4F4306922AAA8AD50039183A /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				4F43068A2AA96BC10039183A /* ApiArtists.swift */,
+				4F4306932AAA8D6B0039183A /* ApiNewRelease.swift */,
+				4F4306952AAA8D8F0039183A /* ApiGenre.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
 		4F6AD14A2AA909DB00781234 = {
 			isa = PBXGroup;
 			children = (
@@ -111,8 +180,10 @@
 		4F6AD1552AA909DB00781234 /* SpotifyChallenge */ = {
 			isa = PBXGroup;
 			children = (
-				4F6AD1562AA909DB00781234 /* SpotifyChallengeApp.swift */,
-				4F6AD1582AA909DB00781234 /* ContentView.swift */,
+				4F43068D2AA96E090039183A /* Model */,
+				4F4306892AA96B940039183A /* Data */,
+				4F43068C2AA96BDA0039183A /* Domain */,
+				4F4306882AA96B8C0039183A /* Presentation */,
 				4F6AD15A2AA909DD00781234 /* Assets.xcassets */,
 				4F6AD15C2AA909DD00781234 /* Preview Content */,
 			);
@@ -164,7 +235,6 @@
 				319815039057999F297C3DA7 /* Pods-SpotifyChallengeTests.debug.xcconfig */,
 				6150717A6F8FBB8BD4081DB4 /* Pods-SpotifyChallengeTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -406,8 +476,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F6AD1592AA909DB00781234 /* ContentView.swift in Sources */,
+				4F43068F2AA96E190039183A /* SpotifyViewModel.swift in Sources */,
+				4F6AD1592AA909DB00781234 /* SpotifyViewController.swift in Sources */,
+				4F5538B42AAA9EB200E2BE43 /* ContentView.swift in Sources */,
+				4F4306962AAA8D8F0039183A /* ApiGenre.swift in Sources */,
+				4F43068B2AA96BC10039183A /* ApiArtists.swift in Sources */,
 				4F6AD1572AA909DB00781234 /* SpotifyChallengeApp.swift in Sources */,
+				4F4306942AAA8D6B0039183A /* ApiNewRelease.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
