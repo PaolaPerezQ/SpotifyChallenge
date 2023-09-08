@@ -10,11 +10,15 @@ import Alamofire
 import SwiftyJSON
 import SwiftUI
 
-class SpotifyViewModel {
+class SpotifyViewModel: ObservableObject {
      //MARK: variables
     private var accessToken: String?
     let accessTokenHeader: HTTPHeaders
     var jsonDecoder: JSON?
+    @Published var songs: [AlbumItem] = []
+    @Published var genres: [String] = []
+    
+
 
     enum Constants {
         enum Url {
@@ -85,138 +89,73 @@ class SpotifyViewModel {
 
         }
     // MARK: conextion
-    
-//    let url = "https://rickandmortyapi.com/api/character"
-//
-//        if let urlS = URL(string: url) {
-//        if let data = try? Data(contentsOf: urlS){
-//            let decodificador = JSONDecoder()
-//
-//            if let datosDecofic = try? decodificador.decode(Resultst.self, from: data) {
-//                print("datosDecodificados: \(datosDecofic.results) ")
-//
-//                resultss = datosDecofic.results
-//
-//                tablaRM.reloadData()
-//            }
-//        }
-//    }
-//
+
     func getNewReleases() {
-           print(Constants.Url.urlNewReleases)
-           getClientCredentialsToken { obtainedToken in
-               if let token = obtainedToken {
-                   let headers: HTTPHeaders = [
-                       "Authorization": "Bearer \(token)"
-                   ]
+        @State var songs: [AlbumItem] = []
 
-                   AF.request(Constants.Url.urlNewReleases, headers: headers).responseJSON { response in
-                       switch response.result {
-                       case .success(let data):
-                           let json = JSON(data)
-                           print("url= new-releases\(json)")
+        print(Constants.Url.urlNewReleases)
+        getClientCredentialsToken { obtainedToken in
+            if let token = obtainedToken {
+                let headers: HTTPHeaders = [
+                    "Authorization": "Bearer \(token)"
+                ]
 
-//                           if let dataJson = try? Data(from: json.debugDescription as! Decoder){
-//                               let decoder = JSONDecoder()
-//                               if let dataDecoder = try? decoder.decode(ApiNewRelease.Album.self, from: json.rawData()){
-//                                   print(" decoficador \( dataDecoder)")
-//                               }
-                          
-                                   let jsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-                                   let decoder = JSONDecoder()
-                                   let albumData = try decoder.decode(ApiNewRelease.Album.self, from: jsonData)
-                                   // Llamar a una función para mostrar los datos en la vista
-                              
-	
-                           self.jsonDecoder = json
+                AF.request(Constants.Url.urlNewReleases, headers: headers).responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let decoder = JSONDecoder()
+                            let spotifyResponse = try decoder.decode(SpotifyResponse.self, from: data)
+                            // Actualiza la vista con los nuevos lanzamientos
+                            self.songs = spotifyResponse.albums.items
+                            print("url= new-releases\(spotifyResponse)")
 
-
-                       case .failure(let error):
-                           print("Error: \(error)")
-                       }
-                   }
-               } else {
-                   print("No se pudo obtener el token de acceso")
-               }
-           }
-       }
+                        } catch {
+                            print("Error decoding JSON: \(error)")
+                        }
+                    case .failure(let error):
+                        print("Error: \(error)")
+                    }
+                }
+            } else {
+                print("No se pudo obtener el token de acceso")
+            }
+        }
+    }
     
-//    func getNewReleases() {
-//    print(Constants.Url.urlNewReleases)
-//    getClientCredentialsToken { obtainedToken in
-//        if let token = obtainedToken {
-//            let headers: HTTPHeaders = [
-//                "Authorization": "Bearer \(token)"
-//            ]
-//
-//            AF.request(Constants.Url.urlNewReleases, headers: headers).responseJSON { response in
-//                switch response.result {
-//                case .success(let data):
-//                    if let json = data as? [String: Any] {
-//                        do {
-//                            let jsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-//                            let decoder = JSONDecoder()
-//                            let albumData = try decoder.decode(ApiNewRelease.Album.self, from: jsonData)
-//                            // Llamar a una función para mostrar los datos en la vista
-//                            self.displayNewReleases(albumData.albums.items)
-//                        } catch {
-//                            print("Error decoding JSON: \(error)")
-//                        }
-//                    } else {
-//                        print("Error: No se pudo convertir la respuesta a JSON")
-//                    }
-//                case .failure(let error):
-//                    print("Error: \(error)")
-//                }
-//            }
-//        } else {
-//            print("No se pudo obtener el token de acceso")
-//        }
-//    }
-//}
-
-    func displayNewReleases(_ newReleases: [ApiNewRelease.Items]) {
-        NavigationView {
-            List(newReleases, id: \.name) { item in
-                NavigationLink(destination: Text("Detalle del álbum: \(item.name)")) {
-                    HStack {
-                        Text(item.name)
-                        Spacer()
-                        Text("Artista: \(item.artists[0].name)")
+    func getAvailableGenres() {
+        @State var genres: [String] = []
+        
+        print(Constants.Url.urlAvalibleGenreSeeds)
+        
+        getClientCredentialsToken { obtainedToken in
+            if let token = obtainedToken {
+                let headers: HTTPHeaders = [
+                    "Authorization": "Bearer \(token)"
+                ]
+                
+                AF.request(Constants.Url.urlAvalibleGenreSeeds, headers: headers).responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let decoder = JSONDecoder()
+                            let genresResponse = try decoder.decode(Genre.self, from: data)
+                            // Ordena los géneros alfabéticamente
+                            let sortedGenres = genresResponse.genres.sorted()
+                            DispatchQueue.main.async { // Asegura que la actualización ocurra en el hilo principal
+                                self.genres = sortedGenres // Actualiza la propiedad de géneros
+                            }
+                        } catch {
+                            print("Error decoding JSON: \(error)")
+                        }
+                    case .failure(let error):
+                        print("Error: \(error)")
                     }
                 }
             }
-            .navigationBarTitle("Nuevos Lanzamientos")
         }
     }
-
-
     
-    func getAvailableGenres() {
-          print(Constants.Url.urlAvalibleGenreSeeds)
-  
-          getClientCredentialsToken { obtainedToken in
-              if let token = obtainedToken {
-                  let headers: HTTPHeaders = [
-                      "Authorization": "Bearer \(token)"
-                  ]
-  
-                  AF.request(Constants.Url.urlAvalibleGenreSeeds, headers: headers).responseJSON { response in
-                      switch response.result {
-                      case .success(let data):
-                          let json = JSON(data)
-  
-                    print("url= available-genre-seeds \(json)")
-
-                      case .failure(let error):
-                          print("Error: \(error)")
-                      }
-                  }
-              } else {
-                  print("No se pudo obtener el token de acceso")
-              }
-          }
-      }
 
     func getArtistInfo(artistID: String) {
 

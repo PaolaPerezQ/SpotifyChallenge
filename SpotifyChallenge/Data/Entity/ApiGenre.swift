@@ -7,11 +7,8 @@
 
 import Foundation
 import SwiftUI
-
-class ApiGenre {
     
-    struct Genre: Identifiable {
-        let id = UUID()
-        let name: String
+    struct Genre: Codable {
+        let genres: [String]
     }
-}
+
