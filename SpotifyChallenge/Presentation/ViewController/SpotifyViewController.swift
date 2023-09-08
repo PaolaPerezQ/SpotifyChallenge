@@ -13,11 +13,11 @@ struct ContentView: View {
         TabView {
             FirstTabView(newReleases: viewModel.songs)
                 .tabItem {
-                    Label("Tabla", systemImage: "list.bullet")
+                    Label("Nuevos release", systemImage: "list.bullet")
                 }
             SecundTabView(genres: viewModel.genres)
                 .tabItem {
-                    Label("Tabla", systemImage: "list.bullet")
+                    Label("Lista de generos", systemImage: "list.bullet")
                 }
         }
         .accentColor(.green)
@@ -32,11 +32,27 @@ struct FirstTabView: View {
     var body: some View {
         NavigationView {
             List(viewModel.songs, id: \.name) { item in
-                NavigationLink(destination: Text("Detalle del artista: \(item.artists[0].name)")) {
+                NavigationLink(destination: Text("Detalle del artista: \(item.name)")) {
                     HStack {
-                        Text(item.name)
+                        if let imageURL = URL(string: item.images.first?.url ?? "") {
+                            AsyncImage(url: imageURL) { image in
+                                image
+                                    .resizable()
+                                    .cornerRadius(10)
+                                    .frame(width: 40, height: 40)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                        }
+
+                        Text("Álbum: \(item.name)")
+                            .font(.subheadline)
+                            .frame(alignment: .center)
                         Spacer()
                         Text("Artista: \(item.artists[0].name)")
+                            .frame(alignment: .center)
+                            .foregroundColor(.green)
+                            .font(.headline)
                     }
                 }
             }
@@ -63,7 +79,7 @@ struct SecundTabView: View {
                 }
                 .navigationBarTitle("Géneros Disponibles")
                 .onAppear() {
-                    viewModel.getAvailableGenres() // Llama a la función para obtener los géneros
+                    viewModel.getAvailableGenres() 
                 }
             }
         }
