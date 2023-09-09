@@ -32,7 +32,7 @@ struct FirstTabView: View {
     var body: some View {
         NavigationView {
             List(viewModel.songs, id: \.name) { item in
-                NavigationLink(destination: Text("Detalle del artista: \(item.name)")) {
+                NavigationLink(destination: ArtistDetailView(artistID: item.artists.first?.id)) {
                     HStack {
                         if let imageURL = URL(string: item.images.first?.url ?? "") {
                             AsyncImage(url: imageURL) { image in
@@ -59,6 +59,47 @@ struct FirstTabView: View {
             .navigationBarTitle("Nuevos Lanzamientos")
             .onAppear(){
                 viewModel.getNewReleases()
+            }
+        }
+    }
+}
+
+struct ArtistDetailView: View {
+    let artistID: String?
+    @StateObject var viewModel = SpotifyViewModel()
+
+    var body: some View {
+        VStack {
+            if let artist = viewModel.artistInfo {
+                if let imageURL = URL(string: artist.images.first?.url ?? "") {
+                    AsyncImage(url: imageURL) { image in
+                        image
+                            .resizable()
+                            .cornerRadius(10)
+                            .frame(width: 200, height: 200)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                }
+                Text("Artista: \(artist.name)")
+                    .font(.title2)
+                    .padding()
+                
+                Text("Géneros: \(artist.genres.joined(separator: ", "))")
+                    .font(.title3)
+                
+                Text("Popularidad: \(artist.popularity)")
+                    .font(.title3)
+                Text("followers: \(artist.followers.total)")
+                    .font(.title3)
+            } else {
+                Text("Cargando información del artista...")
+                    .font(.title)
+            }
+        }
+        .onAppear {
+            if let artistID = artistID {
+                viewModel.getArtistInfo(artistID: artistID)
             }
         }
     }

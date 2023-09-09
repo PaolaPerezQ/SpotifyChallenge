@@ -15,12 +15,13 @@ class SpotifyViewModel: ObservableObject {
     private var accessToken: String?
     let accessTokenHeader: HTTPHeaders
     var jsonDecoder: JSON?
+    var artistIDs = ""
     
     @Published var songs: [AlbumItem] = []
     @Published var genres: [String] = []
-    
-    
-    
+    @Published var artistInfo: SpotifyArtist? 
+
+
     enum Constants {
         enum Url {
             static let urlToken = "https://accounts.spotify.com/api/token"
@@ -83,41 +84,9 @@ class SpotifyViewModel: ObservableObject {
     }
     // MARK: conextion
     
-//    func getNewReleases() {
-//        @State var songs: [AlbumItem] = []
-//
-//        print(Constants.Url.urlNewReleases)
-//        getClientCredentialsToken { obtainedToken in
-//            if let token = obtainedToken {
-//                let headers: HTTPHeaders = [
-//                    "Authorization": "Bearer \(token)"
-//                ]
-//
-//                AF.request(Constants.Url.urlNewReleases, headers: headers).responseData { response in
-//                    switch response.result {
-//                    case .success(let data):
-//                        do {
-//                            let decoder = JSONDecoder()
-//                            let spotifyResponse = try decoder.decode(SpotifyResponse.self, from: data)
-//                            self.songs = spotifyResponse.albums.items
-//                            print("url= new-releases\(spotifyResponse)")
-//
-//                        } catch {
-//                            print("Error decoding JSON: \(error)")
-//                        }
-//                    case .failure(let error):
-//                        print("Error: \(error)")
-//                    }
-//                }
-//            } else {
-//                print("No se pudo obtener el token de acceso")
-//            }
-//        }
-//    }
-    
     func getNewReleases() {
         @State var songs: [AlbumItem] = []
-        var artistIDs: [String] = [] // Arreglo para almacenar los IDs de artistas
+        var artistIDs: [String] = []
     
         print(Constants.Url.urlNewReleases)
         getClientCredentialsToken { obtainedToken in
@@ -139,10 +108,8 @@ class SpotifyViewModel: ObservableObject {
                                 if let artistID = album.artists.first?.id {
                                     artistIDs.append(artistID)
                                     print(" id otros \(artistID)")
+                                    getArtistInfo(artistID: artistID)
                                 }
-                            }
-                            for artistID in artistIDs {
-                                getArtistInfo(artistID: artistID)
                             }
                             
                         } catch {
@@ -158,30 +125,26 @@ class SpotifyViewModel: ObservableObject {
         }
     }
 
-    
-   
     func getArtistInfo(artistID: String) {
+
+        @State var artistInfo: [SpotifyArtist] = []
+
         getClientCredentialsToken { obtainedToken in
             if let token = obtainedToken {
                 let headers: HTTPHeaders = [
                     "Authorization": "Bearer \(token)"
                 ]
-            
 
-                AF.request(Constants.Url.urlArtist, method: .get, headers: headers).responseJSON { response in
+                AF.request(Constants.Url.urlArtist + artistID, method: .get, headers: headers).responseData { response in
                     switch response.result {
-                    case .success(let value):
+                    case .success(let data):
                         do {
-                            let jsonData = try JSONSerialization.data(withJSONObject: value)
                             let decoder = JSONDecoder()
-                            let spotifyResponse = try decoder.decode(SpotifyChallenge.self, from: jsonData)
-
-                            // Aquí tienes la información del artista de la API de Spotify
-                            print("Información del artista de Spotify: \(jsonData.description)")
-
-                       
+                            let jsonData = try decoder.decode(SpotifyArtist.self, from: data)
+                            self.artistInfo = jsonData
+                            print("JSON artista: \(jsonData)")
                         } catch {
-                            print("Error al decodificar la respuesta JSON artis: \(error)")
+                            print("Error al decodificar la respuesta JSON artista: \(error)")
                         }
                     case .failure(let error):
                         print("Error al obtener información del artista: \(error)")
@@ -190,33 +153,6 @@ class SpotifyViewModel: ObservableObject {
             }
         }
     }
-    
-    
-//    func getArtistInfo(artistID: String) {
-//
-//
-//
-//        getClientCredentialsToken { obtainedToken in
-//            if let token = obtainedToken {
-//                let headers: HTTPHeaders = [
-//                    "Authorization": "Bearer \(token)"
-//                ]
-//
-//                AF.request(Constants.Url.urlArtist, method: .get, headers: headers).responseJSON { response in
-//                    switch response.result {
-//                    case .success(let value):
-//                        if let artistInfo = value as? [String: Any] {
-//                            print("url= artists \(artistInfo)")
-//                        }
-//                    case .failure(let error):
-//                        print("Error al obtener información del artista: \(error)")
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-
 
     func getAvailableGenres() {
         @State var genres: [String] = []
@@ -235,10 +171,9 @@ class SpotifyViewModel: ObservableObject {
                         do {
                             let decoder = JSONDecoder()
                             let genresResponse = try decoder.decode(Genre.self, from: data)
-                            // Ordena los géneros alfabéticamente
                             let sortedGenres = genresResponse.genres.sorted()
-                            DispatchQueue.main.async { // Asegura que la actualización ocurra en el hilo principal
-                                self.genres = sortedGenres // Actualiza la propiedad de géneros
+                            DispatchQueue.main.async {
+                                self.genres = sortedGenres
                             }
                         } catch {
                             print("Error decoding JSON: \(error)")

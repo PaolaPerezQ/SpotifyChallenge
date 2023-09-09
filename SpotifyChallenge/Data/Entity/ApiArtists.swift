@@ -8,30 +8,31 @@
 import Foundation
 import SwiftUI
 
-struct SpotifyChallenge: Codable {
-    struct Albums: Codable {
-        let items: [AlbumItem]
-        
-        struct AlbumItem: Codable {
-            let external_urls: ExternalURLs
-            let name: String
-            let type: String
-            let artists: [Artist]
-            let images: [Image]
-            
-            struct ExternalURLs: Codable {
-                let spotify: String
-            }
-            
-            struct Artist: Codable {
-                let type: String
-                let name: String
-                let id: String
-            }
-            
-            struct Image: Codable {
-                let url: String
-            }
-        }
+struct SpotifyArtist: Codable {
+    let href: String
+    let genres: [String]
+    let external_urls: ExternalURLs
+    let images: [Image]
+    let popularity: Int
+    let uri: String
+    let name: String
+    let id: String
+    let followers: Followers
+    let type: String
+
+    struct ExternalURLs: Codable {
+        let spotify: String
+    }
+
+    struct Image: Codable {
+        let height: Int
+        let url: String
+        let width: Int
+    }
+
+    struct Followers: Codable {
+        let href: String?
+        let total: Int
     }
 }
+
