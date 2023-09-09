@@ -72,14 +72,11 @@ class SpotifyViewModel: ObservableObject {
             case .success(let tokenResponse):
                 completion(tokenResponse.access_token)
                 self.accessToken = tokenResponse.access_token
-                print("new \(String(describing: self.accessToken))")
             case .failure(let error):
-                print(" \(Constants.Token.errorToken) \(error)")
                 completion(nil)
             }
         }
         return accessToken
-        print("url= accessTokenHeader1\(self.accessTokenHeader)")
         
     }
     // MARK: conextion
@@ -88,7 +85,6 @@ class SpotifyViewModel: ObservableObject {
         @State var songs: [AlbumItem] = []
         var artistIDs: [String] = []
     
-        print(Constants.Url.urlNewReleases)
         getClientCredentialsToken { obtainedToken in
             if let token = obtainedToken {
                 let headers: HTTPHeaders = [
@@ -102,16 +98,12 @@ class SpotifyViewModel: ObservableObject {
                             let decoder = JSONDecoder()
                             let spotifyResponse = try decoder.decode(SpotifyResponse.self, from: data)
                             self.songs = spotifyResponse.albums.items
-                            print("url= new-releases\(spotifyResponse)")
-                            
                             for album in spotifyResponse.albums.items {
                                 if let artistID = album.artists.first?.id {
                                     artistIDs.append(artistID)
-                                    print(" id otros \(artistID)")
                                     getArtistInfo(artistID: artistID)
                                 }
                             }
-                            
                         } catch {
                             print("Error decoding JSON: \(error)")
                         }
@@ -142,7 +134,6 @@ class SpotifyViewModel: ObservableObject {
                             let decoder = JSONDecoder()
                             let jsonData = try decoder.decode(SpotifyArtist.self, from: data)
                             self.artistInfo = jsonData
-                            print("JSON artista: \(jsonData)")
                         } catch {
                             print("Error al decodificar la respuesta JSON artista: \(error)")
                         }
@@ -156,8 +147,6 @@ class SpotifyViewModel: ObservableObject {
 
     func getAvailableGenres() {
         @State var genres: [String] = []
-        
-        print(Constants.Url.urlAvalibleGenreSeeds)
         
         getClientCredentialsToken { obtainedToken in
             if let token = obtainedToken {
